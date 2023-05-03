@@ -14,9 +14,9 @@ public class Main {
             e.printStackTrace();
         }
         //Enter a first name
-        String firstName = name(scan);
+        //String firstName = name(scan);
         //Enter a last name
-        String lastName = name(scan);
+        //String lastName = name(scan);
         //sum two integers
         int sum = sum(scan);
         
@@ -54,6 +54,12 @@ public class Main {
                 if (i1 + i2 > Integer.MAX_VALUE) {
                     errors.println("ERROR in sum(): Integer Overflow Occured");
                     System.out.println("Integer values too large");
+                }else if(i1 > 2147 || i2 > 2147){
+                    errors.println("ERROR in sum(): One or both int larger than 2147");
+                    System.out.println("Integers must be < 2147");
+                }else if(i1 < -2147 || i2 < -2147){
+                    errors.println("ERROR in sum(): One or both int smaller than -2147");
+                    System.out.println("Integers must be > -2147");
                 }else{
                     flag=true;
                     theSum = i1 + i2;
