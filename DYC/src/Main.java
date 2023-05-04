@@ -31,7 +31,7 @@ public class Main {
         while(!matches){
             System.out.println("Enter a valid name (Start with a capital letter followed by a-z or a '-'): ");
             theString = scan.nextLine();
-            Pattern p = Pattern.compile("^[A-Z][-a-z]{1,49}");
+            Pattern p = Pattern.compile("^[A-Z][-a-z]{1,49}$");
             Matcher m = p.matcher(theString);
             matches = m.matches();
             if (!matches) {
@@ -54,12 +54,12 @@ public class Main {
                 if (i1 + i2 > Integer.MAX_VALUE) {
                     errors.println("ERROR in sum(): Integer Overflow Occured");
                     System.out.println("Integer values too large");
-                }else if(i1 > 2147 || i2 > 2147){
-                    errors.println("ERROR in sum(): One or both int larger than 2147");
-                    System.out.println("Integers must be < 2147");
-                }else if(i1 < -2147 || i2 < -2147){
-                    errors.println("ERROR in sum(): One or both int smaller than -2147");
-                    System.out.println("Integers must be > -2147");
+                }else if(i1 > Integer.MAX_VALUE || i2 > Integer.MAX_VALUE){
+                    errors.println("ERROR in sum(): One or both int larger than " + Integer.MAX_VALUE);
+                    System.out.println("Integers must be < " + Integer.MAX_VALUE);
+                }else if(i1 < Integer.MIN_VALUE || i2 < Integer.MIN_VALUE){
+                    errors.println("ERROR in sum(): One or both int smaller than " + Integer.MIN_VALUE);
+                    System.out.println("Integers must be > " + Integer.MIN_VALUE);
                 }else{
                     flag=true;
                     theSum = i1 + i2;
