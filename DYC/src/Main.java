@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.FileWriter;
 import java.io.PrintStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -198,8 +199,33 @@ public class Main {
         return filename;
     }
 
-    public static void writeOutput() {
+    public static void writeOutput(String input, String output) {
+        try {
+            File myFile = new File(output);
+            if (myFile.createNewFile()) {
+                System.out.println("file created: " + myFile.getName());
+            } else {
+                System.out.println("file already exists");
+            }
+            FileWriter writer = new FileWriter(myFile);
+            writer.write("First Name:");
+            writer.write("\nLast Name:");
+            writer.write("\nFirst Integer:");
+            writer.write("\nSecond Integer:");
+            writer.write("\nSum:");
+            writer.write("\nProduct:");
+            writer.write("\nInput File Name:" + input);
+            writer.write("\nInput File Contents:");
+            writer.close();
+        } catch (Exception e) {
+            System.out.println("an error has occurred print error message");
+            e.printStackTrace();
+        }
+    }
+    public static String getInputFile(String input) {
+        StringBuilder fileContent = new StringBuilder();
 
+        return fileContent.toString();
     }
 }
 
