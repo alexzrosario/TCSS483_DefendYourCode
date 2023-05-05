@@ -43,16 +43,17 @@ public class Main {
         String theString = "";
         boolean matches = false;
         while(!matches){
-            System.out.println("Enter a valid name (Start with a capital letter followed by a-z or a '-'): ");
+            System.out.println("\nEnter a valid name (Start with a capital letter followed by a-z or a '-'): ");
             theString = scan.nextLine();
             Pattern p = Pattern.compile("^[A-Z][-a-z]{1,49}$");
             Matcher m = p.matcher(theString);
             matches = m.matches();
             if (!matches) {
-                errors.println("ERROR in name(): Invalid Name Entered");
+                System.out.println("Invalid Name Entered.");
+                errors.println("ERROR in name(): Invalid Name Entered.");
             }
         }
-        System.out.println("Name Accepted");
+        System.out.println("Name Accepted.");
         return theString;
     }
 
@@ -62,7 +63,7 @@ public class Main {
         int[] results = new int[2];
         while (!flag) {
             try {
-                System.out.println("Enter a valid int: ");
+                System.out.println("\nEnter a valid int: ");
                 i1 = scan.nextLong();
                 System.out.println("Enter another valid int: ");
                 i2 = scan.nextLong();
@@ -73,24 +74,24 @@ public class Main {
                     errors.println("ERROR in sum(): One or both int smaller than " + Integer.MIN_VALUE);
                     System.out.println("Integers must be > " + Integer.MIN_VALUE);
                 }else if (i1 + i2 > Integer.MAX_VALUE) {
-                    errors.println("ERROR in sum(): Integer Overflow Occured");
-                    System.out.println("Sum of integer values too large");
+                    errors.println("ERROR in sum(): Integer Overflow Occured.");
+                    System.out.println("Sum of integer values too large.");
                 }else if (i1 * i2 > Integer.MAX_VALUE) {
-                    errors.println("ERROR in sum(): Integer Overflow Occured");
-                    System.out.println("Product of integer values too large");
+                    errors.println("ERROR in sum(): Integer Overflow Occured.");
+                    System.out.println("Product of integer values too large.");
                 }else if (i1 + i2 < Integer.MIN_VALUE) {
-                    errors.println("ERROR in sum(): Integer Overflow Occured");
-                    System.out.println("Sum of integer values too small");
+                    errors.println("ERROR in sum(): Integer Overflow Occured.");
+                    System.out.println("Sum of integer values too small.");
                 }else if (i1 * i2 < Integer.MIN_VALUE) {
-                    errors.println("ERROR in sum(): Integer Overflow Occured");
-                    System.out.println("Product of integer values too small");
+                    errors.println("ERROR in sum(): Integer Overflow Occured.");
+                    System.out.println("Product of integer values too small.");
                 }else{
                     flag=true;
                     results[0] = (int) (i1 + i2);
                     results[1] = (int) (i1 * i2);
                 }
             } catch (Exception e) {
-                errors.println("ERROR in sum(): Value Entered is not a int");
+                errors.println("ERROR in sum(): Value Entered is not a int.");
                 scan.nextLine();
             }
         }
@@ -102,23 +103,23 @@ public class Main {
         String password = "";
         boolean matches = false;
         while (!matches) {
-            System.out.println("Passwords must be at least 10 char long and contain:\n"+
+            System.out.println("\nPasswords must be at least 10 char long and contain:\n"+
                                "1 uppercase, 1 lowercase , 1 digit\n"+
                                "1 punctuation [-+_!@#$%^&*.,?]\n"+
                                "No whitespaces allowed");
             System.out.println("Enter a valid password: ");
             password = scan.nextLine();
             if (password.contains(" ")) {
-                errors.println("ERROR in createPassword(): Password contains a space");
-                System.out.println("Password cannot contain a space");
+                errors.println("ERROR in createPassword(): Password contains a space.");
+                System.out.println("Password cannot contain a space.");
                 continue;
             }
             Pattern p = Pattern.compile("(?!.*\\s)(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[-+_!@#$%^&*.,?]).{10,}");
             Matcher m = p.matcher(password);
             matches = m.matches();
             if (!matches) {
-                errors.println("ERROR in createPassword(): Invalid Password Entered");
-                System.out.println("Password does not meet criteria");
+                errors.println("ERROR in createPassword(): Invalid Password Entered.");
+                System.out.println("Password does not meet criteria.");
             }
         }
         //jBCrypt Implementation Found Here
@@ -133,11 +134,11 @@ public class Main {
         String password,pwHash = "";
         boolean matches = false;
         while (!matches) {
-            System.out.println("Enter a your password: ");
+            System.out.println("\nEnter a your password: ");
             password = scan.nextLine();
             if (password.contains(" ")) {
-                errors.println("ERROR in verifyPassword(): Password contains a space");
-                System.out.println("Password cannot contain a space");
+                errors.println("ERROR in verifyPassword(): Password contains a space.");
+                System.out.println("Password cannot contain a space.");
                 continue;
             }else{
                 Scanner pwFile=null;
@@ -145,7 +146,7 @@ public class Main {
                     pwFile = new Scanner(new File("password.txt"));
                 } catch (Exception e) {
                     System.out.println("File Not Found.");
-                    errors.println("ERROR in verifyPassword(): File Not Found ");
+                    errors.println("ERROR in verifyPassword(): File Not Found. ");
                     e.printStackTrace();
                 }
                 if (pwFile.hasNextLine()) {
@@ -167,21 +168,36 @@ public class Main {
         String filename = "";
         boolean valid = false;
         while (!valid) {
-            System.out.println("Please type in a valid text file name.");
+            System.out.println("\nPlease type in a valid text file name.");
             System.out.println("Text file must end in .txt cannot have the following characters:\n" +
-                    "<, >, :, \", /, \\, |, ?, *");
+                               "<, >, :, \", /, \\, |, ?, *");
             filename = scan.nextLine();
             Pattern p = Pattern.compile("^(?!password\\.txt$|errorlog\\.txt$)[a-zA-Z0-9!@#$%^&()_+=-]+\\.txt$");
             Matcher m = p.matcher(filename);
             valid = m.matches();
-            if(string[0] != null && filename.equals(string[0])){
-                valid = false;
+            for (String s: string) {
+                if(s != null && filename.equals(s)){
+                    valid = false;
+                    System.out.println("File names must be different.");
+                    errors.println("ERROR in readInputFile(): File names match. ");
+                }
+                
+                
+            }
+            if(string.length == 0){
+                File f = new File(filename);
+                if (!f.exists()) {
+                    System.out.println("Text file does not exist.");
+                    errors.println("ERROR in readInputFile(): Text file does not exist. "); 
+                    valid = false;
+                }
             }
             if (!valid) {
                 System.out.println("Text file does not meet criteria please try again.");
                 errors.println("ERROR in readInputFile(): Text file does not meet criteria. ");
             }
         }
+        System.out.println("File name accepted.");
         return filename;
     }
 
