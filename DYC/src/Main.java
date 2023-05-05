@@ -28,9 +28,11 @@ public class Main {
         //Enter a last name
         //String lastName = name(scan);
         //sum two integers
-        int[] results = sum(scan);
+//        int[] results = sum(scan);
         //create function for input/output files
-        
+        System.out.println("reads from input file");
+        String inputfile = readInputFile(scan);
+        String outputfile = readInputFile(scan);
         //salt and hash password
         //createPassword(scan);
         //verifyPassword(scan);
@@ -134,8 +136,31 @@ public class Main {
         SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
         byte[] hash = factory.generateSecret(spec).getEncoded();
     }
+
     public static void verifyPassword(Scanner scan) {
         String password = "";
+    }
+
+    public static String readInputFile(Scanner scan) {
+        String filename = "";
+        boolean valid = false;
+        while (!valid) {
+            System.out.println("Please type in a valid text file name.");
+            System.out.println("Text file must end in .txt cannot have the following characters:\n" +
+                    "<, >, :, \", /, \\, |, ?, *");
+            filename = scan.nextLine();
+            Pattern p = Pattern.compile("^(?!password\\.txt$|errorlog\\.txt$)[a-zA-Z0-9!@#$%^&()_+=-]+\\.txt$");
+            Matcher m = p.matcher(filename);
+            valid = m.matches();
+            if (!valid) {
+                System.out.print("Text file does not meet criteria please try again.");
+            }
+        }
+        System.out.println("NEW FILE HAS BEEN MADE LEGO");
+        return filename;
+    }
+    public static void writeOutput() {
+
     }
 }
 
