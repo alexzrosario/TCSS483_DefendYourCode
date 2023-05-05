@@ -4,7 +4,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.Scanner;
 
-
 public class Main {
     private static PrintStream errors;
     private static PrintStream passwordStorage;
@@ -181,8 +180,6 @@ public class Main {
                     System.out.println("File names must be different.");
                     errors.println("ERROR in readInputFile(): File names match. ");
                 }
-                
-                
             }
             if(string.length == 0){
                 File f = new File(filename);
