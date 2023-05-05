@@ -1,15 +1,9 @@
-import java.io.IOException;
+import java.io.File;
 import java.io.PrintStream;
-import java.nio.charset.StandardCharsets;
-import java.security.*;
-import java.security.spec.*;
-import javax.crypto.*;
-import javax.crypto.spec.PBEKeySpec;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.Arrays;
-import java.util.HexFormat;
 import java.util.Scanner;
+
 
 public class Main {
     private static PrintStream errors;
@@ -28,12 +22,12 @@ public class Main {
         //Enter a last name
         //String lastName = name(scan);
         //sum two integers
-        int[] results = sum(scan);
+        //int[] results = sum(scan);
         //create function for input/output files
         
         //salt and hash password
-        //createPassword(scan);
-        //verifyPassword(scan);
+        createPassword(scan);
+        verifyPassword(scan);
 
         //System.out.println(results[0]);
         //System.out.println(results[1]);
@@ -102,7 +96,7 @@ public class Main {
   
     }
 
-    public static void createPassword(Scanner scan) throws InvalidKeySpecException, NoSuchAlgorithmException, IOException {
+    public static void createPassword(Scanner scan) {
         String password = "";
         boolean matches = false;
         while (!matches) {
@@ -117,7 +111,7 @@ public class Main {
                 System.out.println("Password cannot contain a space");
                 continue;
             }
-            Pattern p = Pattern.compile("(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[-+_!@#$%^&*.,?]).{10,}");
+            Pattern p = Pattern.compile("(?!.*\\s)(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[-+_!@#$%^&*.,?]).{10,}");
             Matcher m = p.matcher(password);
             matches = m.matches();
             if (!matches) {
@@ -125,17 +119,46 @@ public class Main {
                 System.out.println("Password does not meet criteria");
             }
         }
-        //PBKDF2 Implementation Found Here
-        //https://www.baeldung.com/java-password-hashing
-        SecureRandom random = new SecureRandom();
-        byte[] salt = new byte[16];
-        random.nextBytes(salt);
-        KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
-        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-        byte[] hash = factory.generateSecret(spec).getEncoded();
+        //jBCrypt Implementation Found Here
+        //http://www.mindrot.org/projects/jBCrypt/#download
+        String salt = BCrypt.gensalt(12);
+        String hash = BCrypt.hashpw(password, salt);
+        passwordStorage.println(hash);
+        passwordStorage.close();
     }
+
     public static void verifyPassword(Scanner scan) {
-        String password = "";
+        String password,pwHash = "";
+        boolean matches = false;
+        while (!matches) {
+            System.out.println("Enter a your password: ");
+            password = scan.nextLine();
+            if (password.contains(" ")) {
+                errors.println("ERROR in verifyPassword(): Password contains a space");
+                System.out.println("Password cannot contain a space");
+                continue;
+            }else{
+                Scanner pwFile=null;
+                try {
+                    pwFile = new Scanner(new File("password.txt"));
+                } catch (Exception e) {
+                    System.out.println("File Not Found.");
+                    errors.println("ERROR in verifyPassword(): File Not Found ");
+                    e.printStackTrace();
+                }
+                if (pwFile.hasNextLine()) {
+                    pwHash = pwFile.nextLine();
+                }
+                if (BCrypt.checkpw(password, pwHash)){
+                    System.out.println("Passwords match.");
+                    matches=true;
+                }else{
+                    System.out.println("Passwords do not match.");
+                    errors.println("ERROR in verifyPassword(): Passwords do not match. ");
+                }
+            }
+        }
+        
     }
 }
 
