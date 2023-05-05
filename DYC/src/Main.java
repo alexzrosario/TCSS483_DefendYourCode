@@ -28,14 +28,15 @@ public class Main {
         //Enter a last name
         //String lastName = name(scan);
         //sum two integers
-        //int sum = sum(scan);
-        
+        int[] results = sum(scan);
         //create function for input/output files
         
         //salt and hash password
-        createPassword(scan);
+        //createPassword(scan);
         //verifyPassword(scan);
-        
+
+        //System.out.println(results[0]);
+        //System.out.println(results[1]);
         //System.out.println(sum);
         //System.out.println(firstName+lastName);
         errors.close();
@@ -59,9 +60,10 @@ public class Main {
         return theString;
     }
 
-    public static int sum(Scanner scan) {
-        long i1, i2, theSum = 0;
+    public static int[] sum(Scanner scan) {
+        long i1, i2 = 0;
         boolean flag = false;
+        int[] results = new int[2];
         while (!flag) {
             try {
                 System.out.println("Enter a valid int: ");
@@ -77,16 +79,26 @@ public class Main {
                 }else if (i1 + i2 > Integer.MAX_VALUE) {
                     errors.println("ERROR in sum(): Integer Overflow Occured");
                     System.out.println("Sum of integer values too large");
+                }else if (i1 * i2 > Integer.MAX_VALUE) {
+                    errors.println("ERROR in sum(): Integer Overflow Occured");
+                    System.out.println("Product of integer values too large");
+                }else if (i1 + i2 < Integer.MIN_VALUE) {
+                    errors.println("ERROR in sum(): Integer Overflow Occured");
+                    System.out.println("Sum of integer values too small");
+                }else if (i1 * i2 < Integer.MIN_VALUE) {
+                    errors.println("ERROR in sum(): Integer Overflow Occured");
+                    System.out.println("Product of integer values too small");
                 }else{
                     flag=true;
-                    theSum = i1 + i2;
+                    results[0] = (int) (i1 + i2);
+                    results[1] = (int) (i1 * i2);
                 }
             } catch (Exception e) {
                 errors.println("ERROR in sum(): Value Entered is not a int");
                 scan.nextLine();
             }
         }
-        return ((int)theSum);
+        return (results);
   
     }
 
