@@ -24,12 +24,12 @@ public class Main {
         //sum two integers
         //int[] results = sum(scan);
         //create function for input/output files
-        System.out.println("reads from input file");
+    
         String inputfile = readInputFile(scan);
-        String outputfile = readInputFile(scan);
+        String outputfile = readInputFile(scan,inputfile);
         //salt and hash password
-        createPassword(scan);
-        verifyPassword(scan);
+        //createPassword(scan);
+        //verifyPassword(scan);
 
         //System.out.println(results[0]);
         //System.out.println(results[1]);
@@ -163,7 +163,7 @@ public class Main {
         
     }
 
-    public static String readInputFile(Scanner scan) {
+    public static String readInputFile(Scanner scan, String...string) {
         String filename = "";
         boolean valid = false;
         while (!valid) {
@@ -174,13 +174,17 @@ public class Main {
             Pattern p = Pattern.compile("^(?!password\\.txt$|errorlog\\.txt$)[a-zA-Z0-9!@#$%^&()_+=-]+\\.txt$");
             Matcher m = p.matcher(filename);
             valid = m.matches();
+            if(string[0] != null && filename.equals(string[0])){
+                valid = false;
+            }
             if (!valid) {
-                System.out.print("Text file does not meet criteria please try again.");
+                System.out.println("Text file does not meet criteria please try again.");
+                errors.println("ERROR in readInputFile(): Text file does not meet criteria. ");
             }
         }
-        System.out.println("NEW FILE HAS BEEN MADE LEGO");
         return filename;
     }
+
     public static void writeOutput() {
 
     }
