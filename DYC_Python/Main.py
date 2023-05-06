@@ -14,35 +14,25 @@ class Main:
         passwordStorage = open('./password.txt', 'w+b')
         
         # Enter a first name
-        # firstName = self.__name(errorsLog)
-        # file.write(firstName + "\n")
+        firstName = self.__name(errorsLog)
         # Enter a last name
-        # lastName = self.__name(errorsLog)
+        lastName = self.__name(errorsLog)
         
-        # Sum two integers
-        # sum, prod = self.__sum(errorsLog)
-        # print(sum)
-        # print(prod)
+        # Sum and Multiply two integers
+        sum, prod, firstDigit, secondDigit = self.__sum(errorsLog)
         
-        inputFile = self.__getInputFile(errorsLog)
-        print()
-        outputFile = self.__getInputFile(errorsLog, inputFile)
-        print()
+        # Function for input/output files
+        inputFile = self.__readInputFile(errorsLog)
+        outputFile = self.__readInputFile(errorsLog, inputFile)
         
-        # out = self.__getOutputFile(errorsLog)
-        # outputFile = open(out, 'w')
-        
-        #with open('./password.txt', 'w+b') as passwordStorage:
         # Enter password
-        # self.__createPassword(errorsLog, passwordStorage)
-        print()
+        # Salt and Hash Password
+        self.__createPassword(errorsLog, passwordStorage)
         # Verify password
-        # verifyPassword = self.__verifyPassword(errorsLog, passwordStorage)
-        print()
+        self.__verifyPassword(errorsLog, passwordStorage)
         
-        # contents = [firstName, lastName, sum, prod, inputFile]
-        contents = None
-        writeOutput = self.__writeOutputFile(errorsLog, outputFile, contents)
+        contents = [firstName, lastName, sum, prod, firstDigit, secondDigit, inputFile]
+        self.__writeOutput(errorsLog, contents, outputFile)
         errorsLog.close()
         passwordStorage.close()
     
@@ -91,43 +81,7 @@ class Main:
             except:
                 errorsLog.write("ERROR in sum(): Value entered is not a int\n")
         
-        return sum, prod
-    
-    def __getInputFile(self, errorsLog, *string):
-        inputFile = ""
-        valid = False
-        while not valid:
-            print('Text file must end in .txt and cannot have the following characters:')
-            print('<, >, :, \", /, \\, |, ?, *')
-            inputFile = input("Please type in a valid text file name: ")
-            valid = re.match("^(?!password\.txt$|errorlog\.txt$)[a-zA-Z0-9!@#$%^&()_+=-]+\.txt$", inputFile)
-            
-            # print(string)
-
-            for i in string:
-                if i != None and inputFile == i:
-                    valid = False
-                    
-            # print(string[0])
-            # if string[0] != None and inputFile.equals(string[0]):
-            #     valid = False
-            
-            if not valid:
-                errorsLog.write("ERROR in getInputFile(): Input File Does Not Meet Criteria\n")
-                print("Text file does not meet criteria! Please try again!\n")
-        return inputFile
-    
-    def __writeOutputFile(self, errorsLog, outputFile, contents):
-        try:
-            openOutputFile = open(outputFile, 'w')
-        except:
-            errorsLog.write("ERROR in writeOutputFile(): File Not Found")
-            print("File Not Found")
-            return
-        
-        for i in contents:
-            openOutputFile.write(i + "\n")
-            
+        return sum, prod, i1, i2
     
     def __createPassword(self, errorsLog, passStor):
         passwordString = ""
@@ -144,8 +98,8 @@ class Main:
             
             matches = re.match("(?!.*\s)(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[-+_!@#$%^&*.,?]).{10,}", passwordString)
             if not matches:
-                errorsLog.write("ERROR in createPassword(): Invalid Password Entered\n")
                 print("Password does not meet criteria")
+                errorsLog.write("ERROR in createPassword(): Invalid Password Entered\n")
         
         passwordString = passwordString.encode('utf-8')
         salt = bcrypt.gensalt()
@@ -165,8 +119,8 @@ class Main:
                 hash.seek(0)
                 currPass = hash.readlines()[0]
             except:
-                errorsLog.write("ERROR in verifyPassword(): File Not Found")
                 print("File Not Found")
+                errorsLog.write("ERROR in verifyPassword(): File Not Found")
                 return
 
             passwordString = passwordString.encode('utf-8')
@@ -176,9 +130,75 @@ class Main:
                 matches = True
                 print("Password matches")
             else:
-                errorsLog.write("ERROR in verifyPassword(): Passwords do not match.")
                 print("Password does not match")
+                errorsLog.write("ERROR in verifyPassword(): Passwords do not match.")
+                
+    def __readInputFile(self, errorsLog, *string):
+        fileName = ""
+        valid = False
+        while not valid:
+            print('Text file must end in .txt and cannot have the following characters:')
+            print('<, >, :, \", /, \\, |, ?, *')
+            fileName = input("Please type in a valid text file name: ")
+            valid = re.match("^(?!password\.txt$|errorlog\.txt$)[a-zA-Z0-9!@#$%^&()_+=-]+\.txt$", fileName)
 
+            for i in string:
+                if i != None and fileName == i:
+                    print("File names must be different.")
+                    errorsLog.write("ERROR in readInputFile(): Text file does not exist.")
+                    valid = False
+                    
+            if len(string) == 0:
+                if not os.path.isfile(fileName):
+                    print("Text file does not exist.")
+                    errorsLog.write("ERROR in readInputFile(): Text file does not exist.")
+                    valid = False
+            
+            if not valid:
+                print("Text file does not meet criteria! Please try again!")
+                errorsLog.write("ERROR in getInputFile(): Input File Does Not Meet Criteria\n")
+        
+        print("File name accepted")
+        return fileName
+    
+    def __writeOutput(self, errorsLog, contents, outputFile):
+        myFile = None
+        try:
+            if not os.path.exists(outputFile):
+                myFile = open(outputFile, 'w+')
+                print(f"File created: {myFile.name}")
+            else:
+                print("File already exists.")
+            myFile.close()
+            
+            writer = open(myFile, 'w')
+            writer.write(f"First Name: {contents[0]}\n")
+            writer.write(f"Last Name: {contents[1]}\n")
+            writer.write(f"First Integer: {contents[4]}\n")
+            writer.write(f"Second Integer: {contents[5]}\n")
+            writer.write(f"Sum: {contents[2]}\n")
+            writer.write(f"Product: {contents[3]}\n")
+            writer.write(f"Input File Name: {contents[6]}\n")
+            string = self.__getInputFile(errorsLog, contents[6])
+            writer.write(f"Input File Contents:\n{string}")
+            writer.close()
+        except:
+            print("Errot has occurred printing message")
+            errorsLog.write("ERROR in writeOutput(): File Not Found")
+            
+    def __getInputFile(self, errorsLog, input):
+        fileContent = ""
+        try:
+            with open(input, 'r') as file:
+                for line in file:
+                    fileContent += line
+                    print(line)
+        except:
+            print("Cannot get input from file")
+            errorsLog.write("ERROR in getInputFile(): Cannot get input from file")
+            
+        return fileContent
+                    
 if __name__ == "__main__":
     m = Main()
     m.main()
