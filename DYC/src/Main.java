@@ -199,7 +199,7 @@ public class Main {
         return filename;
     }
 
-    public static void writeOutput(String input, String output) {
+    public static void writeOutput(String input, String output) { // need to finish
         try {
             File myFile = new File(output);
             if (myFile.createNewFile()) {
@@ -222,7 +222,7 @@ public class Main {
             e.printStackTrace();
         }
     }
-    public static String getInputFile(String input) {
+    public static String getInputFile(String input) { // need to finish
         StringBuilder fileContent = new StringBuilder();
 
         return fileContent.toString();
