@@ -18,19 +18,19 @@ public class Main {
             e.printStackTrace();
         }
         //Enter a first name
-        //String firstName = name(scan);
+        String firstName = name(scan);
         //Enter a last name
-        //String lastName = name(scan);
-        //sum two integers
-        //int[] results = sum(scan);
+        String lastName = name(scan);
+        //+* two integers
+        int[] results = sum(scan);
         //create function for input/output files
     
         String inputfile = readInputFile(scan);
         String outputfile = readInputFile(scan,inputfile);
         //salt and hash password
-        //createPassword(scan);
-        //verifyPassword(scan);
-
+        createPassword(scan);
+        verifyPassword(scan);
+        writeOutput(firstName, lastName, results, inputfile, outputfile);
         //System.out.println(results[0]);
         //System.out.println(results[1]);
         //System.out.println(sum);
@@ -60,7 +60,7 @@ public class Main {
     public static int[] sum(Scanner scan) {
         long i1, i2 = 0;
         boolean flag = false;
-        int[] results = new int[2];
+        int[] results = new int[4];
         while (!flag) {
             try {
                 System.out.println("\nEnter a valid int: ");
@@ -89,6 +89,8 @@ public class Main {
                     flag=true;
                     results[0] = (int) (i1 + i2);
                     results[1] = (int) (i1 * i2);
+                    results[2] = (int) i1;
+                    results[3] = (int) i2;
                 }
             } catch (Exception e) {
                 errors.println("ERROR in sum(): Value Entered is not a int.");
@@ -199,32 +201,45 @@ public class Main {
         return filename;
     }
 
-    public static void writeOutput(String input, String output) { // need to finish
+    public static void writeOutput(String firstName, String lastName, int[] results, 
+                                   String inputfile, String outputfile) { 
         try {
-            File myFile = new File(output);
+            File myFile = new File(outputfile);
             if (myFile.createNewFile()) {
-                System.out.println("file created: " + myFile.getName());
+                System.out.println("File created: " + myFile.getName());
             } else {
-                System.out.println("file already exists");
+                System.out.println("File already exists.");
             }
             FileWriter writer = new FileWriter(myFile);
-            writer.write("First Name:");
-            writer.write("\nLast Name:");
-            writer.write("\nFirst Integer:");
-            writer.write("\nSecond Integer:");
-            writer.write("\nSum:");
-            writer.write("\nProduct:");
-            writer.write("\nInput File Name:" + input);
-            writer.write("\nInput File Contents:");
+            writer.write("First Name: "+ firstName);
+            writer.write("\nLast Name: "+ lastName);
+            writer.write("\nFirst Integer: "+ results[2]);
+            writer.write("\nSecond Integer: "+ results[3]);
+            writer.write("\nSum: "+ results[0]);
+            writer.write("\nProduct: "+ results[1]);
+            writer.write("\nInput File Name: " + inputfile);
+            String s = getInputFile(inputfile);
+            writer.write("\nInput File Contents:\n"+s);
             writer.close();
         } catch (Exception e) {
-            System.out.println("an error has occurred print error message");
+            System.out.println("Error has occurred printing message");
+            errors.println("ERROR in writeOutput(): Cannot print message");
             e.printStackTrace();
         }
     }
     public static String getInputFile(String input) { // need to finish
         StringBuilder fileContent = new StringBuilder();
-
+        try {
+            Scanner scanner = new Scanner(new File(input));
+            while(scanner.hasNextLine()){
+                fileContent.append(scanner.nextLine());
+                fileContent.append("\n");
+            }
+        } catch (Exception e) {
+            System.out.println("Cannot get input from file");
+            errors.println("ERROR in getInputFile(): Cannot get input from file");
+            e.printStackTrace();
+        }
         return fileContent.toString();
     }
 }

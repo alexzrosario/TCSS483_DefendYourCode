@@ -1,0 +1,9 @@
+First Name: Alexz
+Last Name: Rosario
+First Integer: 3
+Second Integer: 5
+Sum: 8
+Product: 15
+Input File Name: input.txt
+Input File Contents:
+This is an input file for testing.Text test test!!!
