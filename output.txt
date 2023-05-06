@@ -1,9 +1,9 @@
 First Name: Alexz
 Last Name: Rosario
-First Integer: 6
-Second Integer: 6
-Sum: 12
-Product: 36
+First Integer: 5
+Second Integer: 5
+Sum: 10
+Product: 25
 Input File Name: input.txt
 Input File Contents:
 This is an input file for testing.

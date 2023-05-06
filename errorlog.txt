@@ -1,2 +1,0 @@
-ERROR in readInputFile(): Text file does not exist. 
-ERROR in readInputFile(): Text file does not meet criteria. 

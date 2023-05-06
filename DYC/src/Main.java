@@ -24,17 +24,13 @@ public class Main {
         //+* two integers
         int[] results = sum(scan);
         //create function for input/output files
-    
         String inputfile = readInputFile(scan);
         String outputfile = readInputFile(scan,inputfile);
         //salt and hash password
         createPassword(scan);
         verifyPassword(scan);
+        //write outputfile
         writeOutput(firstName, lastName, results, inputfile, outputfile);
-        //System.out.println(results[0]);
-        //System.out.println(results[1]);
-        //System.out.println(sum);
-        //System.out.println(firstName+lastName);
         errors.close();
         passwordStorage.close();
     }
@@ -91,6 +87,7 @@ public class Main {
                     results[1] = (int) (i1 * i2);
                     results[2] = (int) i1;
                     results[3] = (int) i2;
+                    scan.nextLine();
                 }
             } catch (Exception e) {
                 errors.println("ERROR in sum(): Value Entered is not a int.");
@@ -206,9 +203,9 @@ public class Main {
         try {
             File myFile = new File(outputfile);
             if (myFile.createNewFile()) {
-                System.out.println("File created: " + myFile.getName());
+                System.out.println("\nFile created: " + myFile.getName());
             } else {
-                System.out.println("File already exists.");
+                System.out.println("\nFile already exists. Overwriting file.");
             }
             FileWriter writer = new FileWriter(myFile);
             writer.write("First Name: "+ firstName);
@@ -221,6 +218,7 @@ public class Main {
             String s = getInputFile(inputfile);
             writer.write("\nInput File Contents:\n"+s);
             writer.close();
+            System.out.println("Output File Written");
         } catch (Exception e) {
             System.out.println("Error has occurred printing message");
             errors.println("ERROR in writeOutput(): Cannot print message");
