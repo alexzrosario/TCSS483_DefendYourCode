@@ -24,7 +24,9 @@ public class Main {
         //+* two integers
         int[] results = sum(scan);
         //create function for input/output files
+        System.out.println("Now reading Input file.");
         String inputfile = readInputFile(scan);
+        System.out.println("Now reading Output file.");
         String outputfile = readInputFile(scan,inputfile);
         //salt and hash password
         createPassword(scan);
@@ -168,7 +170,7 @@ public class Main {
         boolean valid = false;
         while (!valid) {
             System.out.println("\nPlease type in a valid text file name.");
-            System.out.println("Text file must end in .txt cannot have the following characters:\n" +
+            System.out.println("Text file must end in .txt and cannot have the following characters:\n" +
                                "<, >, :, \", /, \\, |, ?, *");
             filename = scan.nextLine();
             Pattern p = Pattern.compile("^(?!password\\.txt$|errorlog\\.txt$)[a-zA-Z0-9!@#$%^&()_+=-]+\\.txt$");
@@ -225,7 +227,7 @@ public class Main {
             e.printStackTrace();
         }
     }
-    public static String getInputFile(String input) { // need to finish
+    public static String getInputFile(String input) { 
         StringBuilder fileContent = new StringBuilder();
         try {
             Scanner scanner = new Scanner(new File(input));
