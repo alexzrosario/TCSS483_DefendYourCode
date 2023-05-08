@@ -5,10 +5,16 @@ Paul Lee
 
 DYC - contains the program in Java
 
+Java Captures - contains image captures of expected output
+as well as valid input examples.
+
 DYC_Python - contains the program in Python
 You may need to use this command in the terminal to 
 run the hash function that was used.   
   pip install bcrypt
+
+Python Captures - contains image captures of expected output
+as well as valid input examples.
 
 Input Requirements:
 
